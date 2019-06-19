@@ -1,0 +1,30 @@
+ MOCHA  Testing...
+
+
+
+  index.js
+    √ expected exports provided
+    √ configParser fills defaults if not provided
+    √ configParser drops config properties not on defaults
+    √ configParser logs warning if config properties not on defaults
+    √ configParser does not type check if default type null
+    √ configParser throws if type property missing on default
+    √ configParser throws if a required prop is not provided
+    √ configParser throws if non-null type mismatches default type
+    √ isValidPrivateProperty checks for $_*_* and returns true or false
+    √ componentOptionsWriter writes options to component
+    √ componentOptionsWriter throws if option name not in form $_*_*
+    √ componentOptionsWriter throws if duplicate option name encountered
+    √ renameComponent sets name on component
+    √ renameComponent throws if name not a string
+    √ renameComponent throws if component does not have property name
+    √ registerVuexModule registers module with namespace
+    √ registerVuexModule throws if namespace not a string
+    √ registerVuexModule throws if module not an object
+    √ registerVuexModule throws if module doesn't contain any vuex store properties
+    √ registerVuexModule throws if vuex not a store instance
+
+
+  20 passing (44ms)
+
+ MOCHA  Tests completed successfully
