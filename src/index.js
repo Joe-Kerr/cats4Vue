@@ -93,12 +93,48 @@ export function registerVuexModule(vuex, namespace, vuexModule) {
 	vuex.registerModule(namespace, vuexModule);
 }
 
+export function ensureVersion(Vue, minVersion) {
+	if(!("version" in Vue)) {
+		throw new Error("The version property is missing on the Vue instance.");
+	}
+	
+	if(Vue.version.search(/^[0-9]+\.[0-9]+\.[0-9]+$/) === -1) {
+		throw new Error("Vue version is not in the format x.y.z. Got: "+Vue.version);
+	}
+	
+	const vueVersion = Vue.version.split(".").map((subver)=>parseInt(subver));
+	const reqVersion = (typeof minVersion === "number") ? [minVersion] : minVersion.split(".").map((subver)=>parseInt(subver));
+	
+	reqVersion.forEach((subver)=>{
+		if(typeof subver !== "number" || isNaN(subver)) {
+			throw new Error("The required version is not in the format x, x.y or x.y.z. Got: "+minVersion);
+		}
+	});
+	
+	if(reqVersion.length > 3 || reqVersion.length < 1) {
+		throw new Error("The required version is not in the format x, x.y or x.y.z. Got: "+minVersion);
+	}
+	
+	for(let i=0, ii=reqVersion.length; i<ii; i++) {
+		const actual = vueVersion[i];
+		const expected = reqVersion[i];
+		
+		if(actual === expected) {
+			continue;
+		}
+		
+		return (actual < expected) ? false : true;
+	}
+	return true;
+}
+
 export const cats4Vue = {
 	configParser, 
 	isValidPrivateProperty, 
 	componentOptionsWriter, 
 	renameComponent, 
-	registerVuexModule
+	registerVuexModule,
+	ensureVersion
 };
 
 export default cats4Vue;

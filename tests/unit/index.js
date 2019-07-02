@@ -1,11 +1,11 @@
 const assert = require("assert");
-const {configParser, isValidPrivateProperty, componentOptionsWriter, registerVuexModule, renameComponent} = require("../../src/index.js");
+const {configParser, isValidPrivateProperty, componentOptionsWriter, registerVuexModule, renameComponent, ensureVersion} = require("../../src/index.js");
 const defaultExport = require("../../src/index.js").default;
 
 suite("index.js");
 
 test("expected exports provided", ()=>{
-	const expected = ["configParser", "isValidPrivateProperty", "componentOptionsWriter", "registerVuexModule", "renameComponent", "cats4Vue", "default"];	
+	const expected = ["configParser", "isValidPrivateProperty", "componentOptionsWriter", "registerVuexModule", "renameComponent", "ensureVersion", "cats4Vue", "default"];	
 	assert.deepEqual(Object.keys(require("../../src/index.js")).sort(), expected.sort());
 	
 	const {cats4Vue} = require("../../src/index.js");
@@ -152,4 +152,44 @@ test("registerVuexModule throws if module doesn't contain any vuex store propert
 test("registerVuexModule throws if vuex not a store instance", ()=>{
 	assert.throws(()=>{ registerVuexModule({}, "abc", {getters: {}}); }, {message: /requires vuex instance/});
 	assert.throws(()=>{ registerVuexModule({vuex: {notDispatch: {}}}, "abc", {getters: {}}); }, {message: /requires vuex instance/});
+});
+
+
+test("ensureVersion returns false if Vue version is smaller than required version", ()=>{
+	assert.equal(ensureVersion({version: "1.23.4"}, "2.23.4"), false);
+	assert.equal(ensureVersion({version: "1.23.4"}, "1.33.4"), false);
+	assert.equal(ensureVersion({version: "1.23.4"}, "1.24.4"), false);
+	assert.equal(ensureVersion({version: "1.23.4"}, "1.23.5"), false);
+});
+
+test("ensureVersion returns true if Vue version is greater than or equal to required version", ()=>{
+	assert.equal(ensureVersion({version: "1.23.4"}, "1.23.4"), true);
+	assert.equal(ensureVersion({version: "2.23.4"}, "1.23.4"), true);
+	assert.equal(ensureVersion({version: "1.33.4"}, "1.23.4"), true);
+	assert.equal(ensureVersion({version: "1.24.4"}, "1.23.4"), true);
+	assert.equal(ensureVersion({version: "1.23.5"}, "1.23.4"), true);
+});
+
+test("ensureVersion allows required version to be only in x or x.z format", ()=>{
+	assert.equal(ensureVersion({version: "2.23.4"}, "2"), true);
+	assert.equal(ensureVersion({version: "1.23.4"}, "1.1"), true);
+	
+	assert.equal(ensureVersion({version: "1.23.4"}, "2"), false);
+	assert.equal(ensureVersion({version: "1.2.4"}, "1.3"), false);
+});
+
+test("ensureVersion throws if version property not on Vue", ()=>{
+	assert.throws(()=>{ensureVersion({notVersion: "2.12"}, "2.13")}, {message: /version property is missing/});
+});
+
+test("ensureVersion throws if Vue version format not in x.y.z", ()=>{
+	assert.throws(()=>{ensureVersion({version: "2.12"}, 2)}, {message: /Vue version is not/});
+	assert.throws(()=>{ensureVersion({version: "2"}, 2)}, {message: /Vue version is not/});
+	assert.throws(()=>{ensureVersion({version: "2.12.1.2"}, 2)}, {message: /Vue version is not/});
+	assert.throws(()=>{ensureVersion({version: "2.12.1."}, 2)}, {message: /Vue version is not/});
+});
+
+test("ensureVersion throws if required version format not in x, x.y or x.y.z", ()=>{
+	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.")}, {message: /required version is not/});
+	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.3.4.5")}, {message: /required version is not/});
 });

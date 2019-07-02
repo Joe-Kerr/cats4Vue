@@ -23,8 +23,14 @@
     √ registerVuexModule throws if module not an object
     √ registerVuexModule throws if module doesn't contain any vuex store properties
     √ registerVuexModule throws if vuex not a store instance
+    √ ensureVersion returns false if Vue version is smaller than required version
+    √ ensureVersion returns true if Vue version is greater than or equal to required version
+    √ ensureVersion allows required version to be only in x or x.z format
+    √ ensureVersion throws if version property not on Vue
+    √ ensureVersion throws if Vue version format not in x.y.z
+    √ ensureVersion throws if required version format not in x, x.y or x.y.z
 
 
-  20 passing (44ms)
+  26 passing (23ms)
 
  MOCHA  Tests completed successfully

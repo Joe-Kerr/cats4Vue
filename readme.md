@@ -1,6 +1,8 @@
 # CATs for Vue - Common Authoring Tools for Vue
 
-Set of common helper functions used for authoring plugins (etc.) for Vue. It is intended for internal use. Should the need arise please yell at me and I will update the docs.
+Set of common helper functions used for authoring plugins (etc.) for Vue.
+
+*It is intended for internal use. Should the need arise please yell at me and I will update the docs.*
 
 ## Install
 
@@ -39,3 +41,8 @@ Overrides the name of a component. Might implement some naming convention checks
 ### registerVuexModule
 
 Does what it says plus some validation and checking.
+
+
+### ensureVersion
+
+Checks whether the required version (1, 1.2 or 1.2.3) matches or is greater than the Vue version - otherwise throws.

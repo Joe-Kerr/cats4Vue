@@ -263,12 +263,51 @@ function registerVuexModule(vuex, namespace, vuexModule) {
 
   vuex.registerModule(namespace, vuexModule);
 }
+function ensureVersion(Vue, minVersion) {
+  if (!("version" in Vue)) {
+    throw new Error("The version property is missing on the Vue instance.");
+  }
+
+  if (Vue.version.search(/^[0-9]+\.[0-9]+\.[0-9]+$/) === -1) {
+    throw new Error("Vue version is not in the format x.y.z. Got: " + Vue.version);
+  }
+
+  var vueVersion = Vue.version.split(".").map(function (subver) {
+    return parseInt(subver);
+  });
+  var reqVersion = typeof minVersion === "number" ? [minVersion] : minVersion.split(".").map(function (subver) {
+    return parseInt(subver);
+  });
+  reqVersion.forEach(function (subver) {
+    if (typeof subver !== "number" || isNaN(subver)) {
+      throw new Error("The required version is not in the format x, x.y or x.y.z. Got: " + minVersion);
+    }
+  });
+
+  if (reqVersion.length > 3 || reqVersion.length < 1) {
+    throw new Error("The required version is not in the format x, x.y or x.y.z. Got: " + minVersion);
+  }
+
+  for (var i = 0, ii = reqVersion.length; i < ii; i++) {
+    var actual = vueVersion[i];
+    var expected = reqVersion[i];
+
+    if (actual === expected) {
+      continue;
+    }
+
+    return actual < expected ? false : true;
+  }
+
+  return true;
+}
 var cats4Vue = {
   configParser: configParser,
   isValidPrivateProperty: isValidPrivateProperty,
   componentOptionsWriter: componentOptionsWriter,
   renameComponent: renameComponent,
-  registerVuexModule: registerVuexModule
+  registerVuexModule: registerVuexModule,
+  ensureVersion: ensureVersion
 };
 /* harmony default export */ var src = (cats4Vue);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
@@ -277,6 +316,7 @@ var cats4Vue = {
 /* concated harmony reexport componentOptionsWriter */__webpack_require__.d(__webpack_exports__, "componentOptionsWriter", function() { return componentOptionsWriter; });
 /* concated harmony reexport renameComponent */__webpack_require__.d(__webpack_exports__, "renameComponent", function() { return renameComponent; });
 /* concated harmony reexport registerVuexModule */__webpack_require__.d(__webpack_exports__, "registerVuexModule", function() { return registerVuexModule; });
+/* concated harmony reexport ensureVersion */__webpack_require__.d(__webpack_exports__, "ensureVersion", function() { return ensureVersion; });
 /* concated harmony reexport cats4Vue */__webpack_require__.d(__webpack_exports__, "cats4Vue", function() { return cats4Vue; });
 
 
