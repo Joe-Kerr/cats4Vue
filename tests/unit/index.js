@@ -183,6 +183,16 @@ test("ensureVersion throws if version property not on Vue", ()=>{
 });
 
 test("ensureVersion throws if required version format not in x, x.y or x.y.z", ()=>{
-	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.")}, {message: /required version is not/});
-	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.3.4.5")}, {message: /required version is not/});
+	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.")}, {message: /required version is not in the format x/});
+	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.3.4.5")}, {message: /required version is not in the format x/});
+});
+
+test("ensureVersion throws if Vue version contains anything but numbers and dots", ()=>{
+	assert.throws(()=>{ ensureVersion({version: "2,6"}, "2") }, {message: /Vue version is not in a dot-separated format/});
+	assert.throws(()=>{ ensureVersion({version: "2.o"}, "2") }, {message: /Vue version is not in a dot-separated format/});
+});
+
+test("ensureVersion throws if required version contains anything but numbers and dots", ()=>{
+	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2,6") }, {message: /required version is not in a dot-separated format/});
+	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2.o") }, {message: /required version is not in a dot-separated format/});	
 });

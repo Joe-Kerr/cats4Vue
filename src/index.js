@@ -98,6 +98,14 @@ export function ensureVersion(Vue, minVersion) {
 		throw new Error("The version property is missing on the Vue instance.");
 	}
 	
+	if(Vue.version.replace(/[0-9\.]/g, "").length > 0) {
+		throw new Error("Vue version is not in a dot-separated format. Got: "+Vue.version);
+	}
+		
+	if((""+minVersion).replace(/[0-9\.]/g, "").length > 0) {
+		throw new Error("The required version is not in a dot-separated format. Got: "+Vue.version);
+	}
+	
 	const vueVersion = Vue.version.split(".").map((subver)=>parseInt(subver));
 	const reqVersion = (typeof minVersion === "number") ? [minVersion] : minVersion.split(".").map((subver)=>parseInt(subver));
 	
