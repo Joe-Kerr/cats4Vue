@@ -273,20 +273,29 @@ function registerVuexModule(vuex, namespace, vuexModule) {
   vuex.registerModule(namespace, vuexModule);
 }
 function ensureVersion(Vue, minVersion) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
   if (!("version" in Vue)) {
     throw new Error("The version property is missing on the Vue instance.");
   }
 
-  if (Vue.version.search(/^[0-9]+\.[0-9]+\.[0-9]+$/) === -1) {
-    throw new Error("Vue version is not in the format x.y.z. Got: " + Vue.version);
+  if (Vue.version.replace(/[0-9\.]/g, "").length > 0) {
+    throw new Error("Vue version is not in a dot-separated format. Got: " + Vue.version);
+  }
+
+  if (("" + minVersion).replace(/[0-9\.]/g, "").length > 0) {
+    throw new Error("The required version is not in a dot-separated format. Got: " + Vue.version);
   }
 
   var vueVersion = Vue.version.split(".").map(function (subver) {
     return parseInt(subver);
   });
-  var reqVersion = typeof minVersion === "number" ? [minVersion] : minVersion.split(".").map(function (subver) {
+  var reqVersion = minVersion.split(".").map(function (subver) {
     return parseInt(subver);
   });
+  var throwInsteadOfReturn = options.throwInsteadOfReturn !== undefined ? options.throwInsteadOfReturn : false;
+  var result = true; //Below loop can return before recognising invalid number.
+
   reqVersion.forEach(function (subver) {
     if (typeof subver !== "number" || isNaN(subver)) {
       throw new Error("The required version is not in the format x, x.y or x.y.z. Got: " + minVersion);
@@ -305,10 +314,15 @@ function ensureVersion(Vue, minVersion) {
       continue;
     }
 
-    return actual < expected ? false : true;
+    result = actual < expected ? false : true;
+    break;
   }
 
-  return true;
+  if (result === false && throwInsteadOfReturn === true) {
+    throw new Error("You do not have the required Vue version of " + minVersion + ". You have: " + Vue.version);
+  }
+
+  return result;
 }
 var cats4Vue = {
   configParser: configParser,
