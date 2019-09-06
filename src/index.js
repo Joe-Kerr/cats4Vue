@@ -93,7 +93,7 @@ export function registerVuexModule(vuex, namespace, vuexModule) {
 	vuex.registerModule(namespace, vuexModule);
 }
 
-export function ensureVersion(Vue, minVersion) {
+export function ensureVersion(Vue, minVersion, options={}) {
 	if(!("version" in Vue)) {
 		throw new Error("The version property is missing on the Vue instance.");
 	}
@@ -108,6 +108,8 @@ export function ensureVersion(Vue, minVersion) {
 	
 	const vueVersion = Vue.version.split(".").map((subver)=>parseInt(subver));
 	const reqVersion = minVersion.split(".").map((subver)=>parseInt(subver));
+	const throwInsteadOfReturn = (options.throwInsteadOfReturn !== undefined) ? options.throwInsteadOfReturn : false;
+	let result = true;
 	
 	//Below loop can return before recognising invalid number.
 	reqVersion.forEach((subver)=>{
@@ -128,9 +130,15 @@ export function ensureVersion(Vue, minVersion) {
 			continue;
 		}
 		
-		return (actual < expected) ? false : true;
+		result = (actual < expected) ? false : true;
+		break;
 	}
-	return true;
+	
+	if(result === false && throwInsteadOfReturn === true) {
+		throw new Error("You do not have the required Vue version of "+minVersion+". You have: "+Vue.version);
+	}
+	
+	return result;
 }
 
 export const cats4Vue = {

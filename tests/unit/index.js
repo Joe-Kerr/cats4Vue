@@ -196,3 +196,7 @@ test("ensureVersion throws if required version contains anything but numbers and
 	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2,6") }, {message: /required version is not in a dot-separated format/});
 	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2.o") }, {message: /required version is not in a dot-separated format/});	
 });
+
+test("ensureVersion throws if Vue version is too low if option is set", ()=>{
+	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2.7", {throwInsteadOfReturn: true}) }, {message: /do not have the required Vue version of/});
+});
