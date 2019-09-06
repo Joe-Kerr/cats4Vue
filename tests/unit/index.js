@@ -182,13 +182,6 @@ test("ensureVersion throws if version property not on Vue", ()=>{
 	assert.throws(()=>{ensureVersion({notVersion: "2.12"}, "2.13")}, {message: /version property is missing/});
 });
 
-test("ensureVersion throws if Vue version format not in x.y.z", ()=>{
-	assert.throws(()=>{ensureVersion({version: "2.12"}, 2)}, {message: /Vue version is not/});
-	assert.throws(()=>{ensureVersion({version: "2"}, 2)}, {message: /Vue version is not/});
-	assert.throws(()=>{ensureVersion({version: "2.12.1.2"}, 2)}, {message: /Vue version is not/});
-	assert.throws(()=>{ensureVersion({version: "2.12.1."}, 2)}, {message: /Vue version is not/});
-});
-
 test("ensureVersion throws if required version format not in x, x.y or x.y.z", ()=>{
 	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.")}, {message: /required version is not/});
 	assert.throws(()=>{ensureVersion({version: "1.23.4"}, "2.3.4.5")}, {message: /required version is not/});

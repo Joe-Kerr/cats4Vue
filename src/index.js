@@ -98,10 +98,6 @@ export function ensureVersion(Vue, minVersion) {
 		throw new Error("The version property is missing on the Vue instance.");
 	}
 	
-	if(Vue.version.search(/^[0-9]+\.[0-9]+\.[0-9]+$/) === -1) {
-		throw new Error("Vue version is not in the format x.y.z. Got: "+Vue.version);
-	}
-	
 	const vueVersion = Vue.version.split(".").map((subver)=>parseInt(subver));
 	const reqVersion = (typeof minVersion === "number") ? [minVersion] : minVersion.split(".").map((subver)=>parseInt(subver));
 	
