@@ -107,8 +107,9 @@ export function ensureVersion(Vue, minVersion) {
 	}
 	
 	const vueVersion = Vue.version.split(".").map((subver)=>parseInt(subver));
-	const reqVersion = (typeof minVersion === "number") ? [minVersion] : minVersion.split(".").map((subver)=>parseInt(subver));
+	const reqVersion = minVersion.split(".").map((subver)=>parseInt(subver));
 	
+	//Below loop can return before recognising invalid number.
 	reqVersion.forEach((subver)=>{
 		if(typeof subver !== "number" || isNaN(subver)) {
 			throw new Error("The required version is not in the format x, x.y or x.y.z. Got: "+minVersion);
