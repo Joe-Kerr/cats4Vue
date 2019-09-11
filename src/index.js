@@ -41,6 +41,61 @@ export function isValidPrivateProperty(prop) {
 	return (prop[0] === "$") && (prop[1] === "_") && (prop.substring(2).indexOf("_") > -1);
 }
 
+export function isValidRootProperty(prop, throwInsteadOfReturn=false) {
+	if(typeof prop !== "string") {
+		if(throwInsteadOfReturn === true) {
+			throw new Error("Tried to write a non-string property to the object root.");
+		}
+		return false;
+	}
+	
+	//https://vuejs.org/v2/api/#Options-Data (left panel)
+	const reserved = [
+		"data", 
+		"props", 
+		"propsData", 
+		"computed", 
+		"methods", 
+		"watch", 
+		"el", 
+		"template", 
+		"render", 
+		"renderError", 
+		"beforeCreate", 
+		"created", 
+		"beforeMount", 
+		"mounted", 
+		"beforeUpdate", 
+		"updated", 
+		"activated", 
+		"deactivated", 
+		"beforeDestroy", 
+		"destroyed", 
+		"errorCaptured", 
+		"directives", 
+		"filters", 
+		"components", 
+		"parent", 
+		"mixins", 
+		"extends", 
+		"provide", 
+		"inject", 
+		"name", 
+		"delimiters", 
+		"functional", 
+		"model", 
+		"inheritAttrs", 
+		"comments"	
+	];
+	const check = (reserved.indexOf(prop) === -1);
+	
+	if(check === false && throwInsteadOfReturn === true) {
+		throw new Error("Adding property to object root failed. '"+prop+"' is a reserved Vue property.");
+	}
+	
+	return check;
+}
+
 export function componentOptionsWriter(component, componentOptions) {
 	for(const name in componentOptions) {
 		if(name in component) {
@@ -144,6 +199,7 @@ export function ensureVersion(Vue, minVersion, options={}) {
 export const cats4Vue = {
 	configParser, 
 	isValidPrivateProperty, 
+	isValidRootProperty,
 	componentOptionsWriter, 
 	renameComponent, 
 	registerVuexModule,

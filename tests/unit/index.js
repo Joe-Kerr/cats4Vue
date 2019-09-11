@@ -1,11 +1,11 @@
 const assert = require("assert");
-const {configParser, isValidPrivateProperty, componentOptionsWriter, registerVuexModule, renameComponent, ensureVersion} = require("../../src/index.js");
+const {configParser, isValidPrivateProperty, isValidRootProperty, componentOptionsWriter, registerVuexModule, renameComponent, ensureVersion} = require("../../src/index.js");
 const defaultExport = require("../../src/index.js").default;
 
 suite("index.js");
 
 test("expected exports provided", ()=>{
-	const expected = ["configParser", "isValidPrivateProperty", "componentOptionsWriter", "registerVuexModule", "renameComponent", "ensureVersion", "cats4Vue", "default"];	
+	const expected = ["configParser", "isValidPrivateProperty", "isValidRootProperty", "componentOptionsWriter", "registerVuexModule", "renameComponent", "ensureVersion", "cats4Vue", "default"];	
 	assert.deepEqual(Object.keys(require("../../src/index.js")).sort(), expected.sort());
 	
 	const {cats4Vue} = require("../../src/index.js");
@@ -74,6 +74,27 @@ test("isValidPrivateProperty checks for $_*_* and returns true or false", ()=>{
 	assert.equal(isValidPrivateProperty("$missingFirstUnderscore"), false);
 	assert.equal(isValidPrivateProperty("$missingFirstUnderscore_still"), false);
 	assert.equal(isValidPrivateProperty("$_notNamespacedOrPropertied"), false);
+});
+
+
+test("isValidRootProperty returns bool for in/valid property", ()=>{
+	assert.equal(isValidRootProperty("data"), false);
+	assert.equal(isValidRootProperty(["bollocks"]), false);
+	assert.equal(isValidRootProperty("$data"), true);
+});
+
+test("isValidRootProperty throws instead of returns for invalid property if option is set", ()=>{
+	assert.throws(()=>{ isValidRootProperty("data", true); }, /is a reserved Vue property/);
+	assert.doesNotThrow(()=>{ isValidRootProperty("data", false); });
+});
+
+test("isValidRootProperty throws instead of returns if property is not a string if option is set", ()=>{
+	assert.throws(()=>{ isValidRootProperty(["bollocks"], true); }, /non-string property/);
+	assert.throws(()=>{ isValidRootProperty({"string":"bollocks"}, true); }, /non-string property/);
+	assert.throws(()=>{ isValidRootProperty(()=>"bollocks", true); }, /non-string property/);
+	assert.throws(()=>{ isValidRootProperty(123, true); }, /non-string property/);
+	assert.throws(()=>{ isValidRootProperty(false, true); }, /non-string property/);
+	assert.throws(()=>{ isValidRootProperty(undefined, true); }, /non-string property/);
 });
 
 
