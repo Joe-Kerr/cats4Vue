@@ -65,7 +65,7 @@ test("configParser throws if non-null type mismatches default type", ()=>{
 });
 
 
-test("isValidPrivateProperty checks for $_*_* and returns true or false", ()=>{
+test("isValidPrivateProperty checks for $_*_* and returns bool", ()=>{
 	assert.equal(isValidPrivateProperty("$_namespace_property"), true);
 	assert.equal(isValidPrivateProperty("$_namespace_property_whatever"), true);
 	assert.equal(isValidPrivateProperty("missingPrefix"), false);
@@ -217,6 +217,6 @@ test("ensureVersion throws if required version contains anything but numbers and
 	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2.o") }, {message: /required version is not in a dot-separated format/});	
 });
 
-test("ensureVersion throws if Vue version is too low if option is set", ()=>{
+test("ensureVersion throws instead of returns if Vue version is too low if option is set", ()=>{
 	assert.throws(()=>{ ensureVersion({version: "2.6"}, "2.7", {throwInsteadOfReturn: true}) }, {message: /do not have the required Vue version of/});
 });
