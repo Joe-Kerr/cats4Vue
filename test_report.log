@@ -11,7 +11,10 @@
     √ configParser throws if type property missing on default
     √ configParser throws if a required prop is not provided
     √ configParser throws if non-null type mismatches default type
-    √ isValidPrivateProperty checks for $_*_* and returns true or false
+    √ isValidPrivateProperty checks for $_*_* and returns bool
+    √ isValidRootProperty returns bool for in/valid property
+    √ isValidRootProperty throws instead of returns for invalid property if option is set
+    √ isValidRootProperty throws instead of returns if property is not a string if option is set
     √ componentOptionsWriter writes options to component
     √ componentOptionsWriter throws if option name not in form $_*_*
     √ componentOptionsWriter throws if duplicate option name encountered
@@ -30,9 +33,9 @@
     √ ensureVersion throws if required version format not in x, x.y or x.y.z
     √ ensureVersion throws if Vue version contains anything but numbers and dots
     √ ensureVersion throws if required version contains anything but numbers and dots
-    √ ensureVersion throws if Vue version is too low if option is set
+    √ ensureVersion throws instead of returns if Vue version is too low if option is set
 
 
-  28 passing (23ms)
+  31 passing (24ms)
 
  MOCHA  Tests completed successfully

@@ -28,6 +28,11 @@ Type checks config parameters against defaults, fills in default values and chec
 Checks if a property (stuffed on the Vue instance) is properly namespaced. See also https://vuejs.org/v2/style-guide/#Private-property-names-essential
 
 
+### isValidRootProperty
+
+Checks if a custom property on the raw Vue component is a reserved Vue keyword.
+
+
 ### componentOptionsWriter
 
 Writes properties on a given component, checks for proper namespacing and duplicate names.

@@ -212,6 +212,27 @@ function configParser() {
 function isValidPrivateProperty(prop) {
   return prop[0] === "$" && prop[1] === "_" && prop.substring(2).indexOf("_") > -1;
 }
+function isValidRootProperty(prop) {
+  var throwInsteadOfReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (typeof prop !== "string") {
+    if (throwInsteadOfReturn === true) {
+      throw new Error("Tried to write a non-string property to the object root.");
+    }
+
+    return false;
+  } //https://vuejs.org/v2/api/#Options-Data (left panel)
+
+
+  var reserved = ["data", "props", "propsData", "computed", "methods", "watch", "el", "template", "render", "renderError", "beforeCreate", "created", "beforeMount", "mounted", "beforeUpdate", "updated", "activated", "deactivated", "beforeDestroy", "destroyed", "errorCaptured", "directives", "filters", "components", "parent", "mixins", "extends", "provide", "inject", "name", "delimiters", "functional", "model", "inheritAttrs", "comments"];
+  var check = reserved.indexOf(prop) === -1;
+
+  if (check === false && throwInsteadOfReturn === true) {
+    throw new Error("Adding property to object root failed. '" + prop + "' is a reserved Vue property.");
+  }
+
+  return check;
+}
 function componentOptionsWriter(component, componentOptions) {
   for (var name in componentOptions) {
     if (name in component) {
@@ -318,6 +339,7 @@ function ensureVersion(Vue, minVersion) {
 var cats4Vue = {
   configParser: configParser,
   isValidPrivateProperty: isValidPrivateProperty,
+  isValidRootProperty: isValidRootProperty,
   componentOptionsWriter: componentOptionsWriter,
   renameComponent: renameComponent,
   registerVuexModule: registerVuexModule,
@@ -327,6 +349,7 @@ var cats4Vue = {
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 /* concated harmony reexport configParser */__webpack_require__.d(__webpack_exports__, "configParser", function() { return configParser; });
 /* concated harmony reexport isValidPrivateProperty */__webpack_require__.d(__webpack_exports__, "isValidPrivateProperty", function() { return isValidPrivateProperty; });
+/* concated harmony reexport isValidRootProperty */__webpack_require__.d(__webpack_exports__, "isValidRootProperty", function() { return isValidRootProperty; });
 /* concated harmony reexport componentOptionsWriter */__webpack_require__.d(__webpack_exports__, "componentOptionsWriter", function() { return componentOptionsWriter; });
 /* concated harmony reexport renameComponent */__webpack_require__.d(__webpack_exports__, "renameComponent", function() { return renameComponent; });
 /* concated harmony reexport registerVuexModule */__webpack_require__.d(__webpack_exports__, "registerVuexModule", function() { return registerVuexModule; });
