@@ -1,6 +1,5 @@
 const assert = require("assert");
 const {configParser, isValidPrivateProperty, isValidRootProperty, componentOptionsWriter, registerVuexModule, renameComponent, ensureVersion} = require("../../src/index.js");
-const defaultExport = require("../../src/index.js").default;
 
 suite("index.js");
 
