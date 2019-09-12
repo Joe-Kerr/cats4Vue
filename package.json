@@ -1,6 +1,6 @@
 {
   "name": "cats4vue",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Common Authoring Tools for Vue.",
   "main": "./dist/cats4vue.common.js",
   "module": "./src/index.js",
@@ -23,5 +23,6 @@
   "scripts": {
     "dev:test:unit": "vue-cli-service test:unit --ui qunit --recursive tests/unit/**/*.js",
     "dev:build": "vue-cli-service build --target lib --name cats4Vue --entry ./src/index.js --dest ./dist"
-  }
+  },
+  "sideEffects": false
 }
