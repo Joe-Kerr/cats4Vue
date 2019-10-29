@@ -1,6 +1,6 @@
 {
   "name": "cats4vue",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Common Authoring Tools for Vue.",
   "main": "./dist/cats4vue.common.js",
   "module": "./src/index.js",
