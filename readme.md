@@ -8,7 +8,7 @@ Set of common helper functions used for authoring plugins (etc.) for Vue.
 
 **1)** 
 ```
-npm install @joe_kerr/cats4vue
+npm install cats4vue
 ```
 **2)**
 ```javascsript
